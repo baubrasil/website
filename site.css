@@ -16,7 +16,6 @@ h1{font-size:clamp(69px,18vw,156px);line-height:.91;letter-spacing:-.075em}h1>sp
 form{display:grid;gap:16px}label{display:grid;gap:6px}label small{display:contents}input,textarea{width:100%;padding:10px 4px;border:0;border-bottom:1px solid var(--rule);border-radius:0;background:transparent;color:var(--paper)}textarea{resize:vertical}.check{display:flex;align-items:center;gap:10px;font-size:14px;min-height:44px}.check input{width:19px;height:19px}.note{font-size:14px;color:#d8dedf}[role=status]:empty{display:none}footer>.wrap{padding-block:32px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between}address{display:flex;flex-wrap:wrap;gap:0 18px;font-style:normal}address a{display:inline-flex;align-items:center;min-height:44px}
 @media(max-width:370px){.bar{gap:8px}.bar>span{font-size:11px}.brand{width:81px}}
 @media(min-width:760px){.gallery{grid-auto-columns:calc((100% - 32px)/3);gap:16px}.split,.opening{display:grid;grid-template-columns:1.1fr 1fr;gap:7%}.opening{align-items:end}.intro{margin:0}.button{width:fit-content}.plate-art svg{height:170px}.split h2{max-width:12ch}}
-@media(prefers-reduced-motion:reduce){body:not([data-play]) .stage{animation-play-state:paused;animation-delay:-8s}}
 
 /* As curvas atravessam as margens e deixam o texto sobre uma superfície plana. */
 #inicio{position:relative;padding-bottom:clamp(28px,6vw,76px)}

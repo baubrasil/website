@@ -6,17 +6,7 @@ document.addEventListener('keydown', event => {
     menu.querySelector('summary').focus();
   }
 });
-const motion = document.querySelector('.motion-control');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-function setPaused(paused) {
-  document.body.toggleAttribute('data-paused', paused);
-  document.body.toggleAttribute('data-play', !paused);
-  motion.textContent = paused ? 'Reproduzir movimento' : 'Pausar movimento';
-}
-motion.hidden = false;
-setPaused(reduced.matches);
-motion.onclick = () => setPaused(!document.body.hasAttribute('data-paused'));
-reduced.addEventListener('change', () => setPaused(reduced.matches));
 
 const gallery = document.querySelector('.gallery');
 const pager = document.querySelector('.pager');

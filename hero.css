@@ -10,9 +10,4 @@
     @keyframes outline{0%,15%{stroke-dashoffset:330;opacity:0}19%{opacity:1}41%,60%{stroke-dashoffset:0;opacity:1}71%,100%{stroke-dashoffset:0;opacity:0}}
     @keyframes build{0%,38%{transform:scaleX(0)}65%,100%{transform:scaleX(1)}}
     @keyframes place-dot{0%,58%{opacity:0;transform:translateY(-7px)}67%,100%{opacity:1;transform:none}}
-    body[data-paused] .stage{animation-play-state:paused}
-    .motion-control{margin-top:16px;padding:0;min-height:44px;display:flex;align-items:center;gap:8px;font-size:13px;color:inherit;background:none;border:0}
-    .motion-control[hidden]{display:none}
-    .motion-control::before{content:"Ⅱ";font-weight:700}
-    body[data-paused] .motion-control::before{content:"▷"}
-    @media(prefers-reduced-motion:reduce){body:not([data-play]) .stage{animation-play-state:paused;animation-delay:-8s}}
+    @media(prefers-reduced-motion:reduce){.drawing-board .stage{animation-play-state:paused;animation-delay:-8s}}
