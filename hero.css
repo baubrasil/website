@@ -1,0 +1,18 @@
+.drawing-board use,.drawing-board text{font-family:Plex,Arial,sans-serif;font-size:100px;font-weight:700;letter-spacing:-6px}
+    .drawing-board .stage{animation-duration:10s;animation-timing-function:linear;animation-iteration-count:infinite}
+    .pencil{animation-name:pencil;stroke-dasharray:1;stroke-linecap:round;stroke-linejoin:round}
+    .guides{animation-name:guides}
+    .outline{animation-name:outline;stroke-dasharray:330}
+    .assembly-window{animation-name:build;transform-box:fill-box;transform-origin:left}
+    .period-piece{animation-name:place-dot}
+    @keyframes pencil{0%{stroke-dashoffset:.85;opacity:.85}18%,27%{stroke-dashoffset:0;opacity:.9}48%,100%{stroke-dashoffset:0;opacity:0}}
+    @keyframes guides{0%,9%{opacity:0}20%,46%{opacity:.65}63%,100%{opacity:0}}
+    @keyframes outline{0%,15%{stroke-dashoffset:330;opacity:0}19%{opacity:1}41%,60%{stroke-dashoffset:0;opacity:1}71%,100%{stroke-dashoffset:0;opacity:0}}
+    @keyframes build{0%,38%{transform:scaleX(0)}65%,100%{transform:scaleX(1)}}
+    @keyframes place-dot{0%,58%{opacity:0;transform:translateY(-7px)}67%,100%{opacity:1;transform:none}}
+    body[data-paused] .stage{animation-play-state:paused}
+    .motion-control{margin-top:16px;padding:0;min-height:44px;display:flex;align-items:center;gap:8px;font-size:13px;color:inherit;background:none;border:0}
+    .motion-control[hidden]{display:none}
+    .motion-control::before{content:"Ⅱ";font-weight:700}
+    body[data-paused] .motion-control::before{content:"▷"}
+    @media(prefers-reduced-motion:reduce){body:not([data-play]) .stage{animation-play-state:paused;animation-delay:-8s}}
