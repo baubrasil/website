@@ -70,7 +70,7 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .team-profiles {
   position:relative;display:grid;gap:clamp(18px,2vw,32px);
 }
-.team-track {position:relative;margin:-28px clamp(8px,2.5vw,40px) 0}
+.team-profiles {margin:-28px clamp(8px,2.5vw,40px) 0}
 .team-profiles article {
   display:grid;grid-template-columns:clamp(62px,16vw,110px) 1fr;gap:clamp(16px,2vw,32px);
   min-height:clamp(175px,18vw,240px);align-items:center;padding:clamp(18px,2.6vw,40px);background:#faf9f5;
@@ -88,11 +88,12 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .team-print img {grid-column:2;grid-row:1;justify-self:center}
   .team-copy {grid-column:1;grid-row:1}
   .team-profiles {grid-template-columns:1fr 1fr}
-  .team-track {margin-top:-44px}
+  .team-profiles {margin-top:-44px}
 }
 @media(max-width:759px) {
   .team-track.stacked::after {content:"";display:block;height:60vh;height:60svh}
-  .stacked .team-profiles {position:sticky;top:30vh;top:30svh;isolation:isolate}
+  .stacked .team-scene {position:sticky;top:var(--scene-top,12px)}
+  .stacked .team-profiles {margin-top:-62px;isolation:isolate}
   .stacked article {grid-area:1/1;transform-origin:bottom center;box-shadow:0 5px 16px #182c4212}
   .stacked:not(.show-victor) article:last-child,.stacked.show-victor article:first-child {
     transform:translateY(16px) scale(.94);background:#e1e7e5;

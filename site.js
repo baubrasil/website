@@ -66,14 +66,16 @@ for (const element of document.querySelectorAll('#possibilidades .section-head, 
 
 const wide = matchMedia('(min-width:850px)');
 const teamTrack = document.querySelector('.team-track');
+const teamScene = teamTrack.querySelector('.team-scene');
+const profiles = teamScene.querySelector('.team-profiles');
 const teamMobile = matchMedia('(max-width:759px)');
 function updateTeamStack() {
   teamTrack.classList.toggle('stacked', teamMobile.matches);
   if (!teamMobile.matches) return;
-  const profiles = teamTrack.firstElementChild;
-  const travel = teamTrack.offsetHeight - profiles.offsetHeight;
+  const travel = teamTrack.offsetHeight - teamScene.offsetHeight;
   if (travel <= 0) return;
-  const stickyTop = parseFloat(getComputedStyle(profiles).top);
+  const stickyTop = Math.min(12, innerHeight - teamScene.offsetHeight - 24);
+  teamScene.style.setProperty('--scene-top', stickyTop + 'px');
   const distance = stickyTop - teamTrack.getBoundingClientRect().top;
   const progress = Math.max(0, Math.min(1, (distance / travel - .12) / .52));
   profiles.style.setProperty('--swap', progress);
