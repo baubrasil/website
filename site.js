@@ -74,7 +74,8 @@ function updateTeamStack() {
   if (!teamMobile.matches) return;
   const travel = teamTrack.offsetHeight - teamScene.offsetHeight;
   if (travel <= 0) return;
-  const stickyTop = Math.min(12, innerHeight - teamScene.offsetHeight - 24);
+  const freeSpace = innerHeight - teamScene.offsetHeight - 16;
+  const stickyTop = Math.min(freeSpace / 2, freeSpace);
   teamScene.style.setProperty('--scene-top', stickyTop + 'px');
   const distance = stickyTop - teamTrack.getBoundingClientRect().top;
   const progress = Math.max(0, Math.min(1, (distance / travel - .12) / .52));

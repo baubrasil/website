@@ -91,7 +91,8 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .team-profiles {margin-top:-44px}
 }
 @media(max-width:759px) {
-  .team-track.stacked::after {content:"";display:block;height:60vh;height:60svh}
+  #sobre .block {padding-bottom:24px}
+  .team-track.stacked::after {content:"";display:block;height:clamp(160px,38vh,300px);height:clamp(160px,38svh,300px)}
   .stacked .team-scene {position:sticky;top:var(--scene-top,12px)}
   .stacked .team-profiles {margin-top:-62px;isolation:isolate}
   .stacked article {grid-area:1/1;transform-origin:bottom center;box-shadow:0 5px 16px #182c4212}
