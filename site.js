@@ -81,7 +81,7 @@ const showcase = document.querySelector('.service-showcase');
 const deck = showcase.querySelector('.service-deck');
 const cards = [...deck.children];
 const controls = showcase.querySelector('.service-nav');
-const [back, forward, rotation] = controls.querySelectorAll('button');
+const [back, forward] = controls.querySelectorAll('button');
 let activeService = 0;
 let rotating = !reduced.matches;
 let inView = false;
@@ -98,8 +98,6 @@ function showService(index) {
 }
 function scheduleService() {
   clearInterval(interval);
-  rotation.textContent = rotating ? 'Pausar' : 'Reproduzir';
-  rotation.setAttribute('aria-label', rotating ? 'Pausar troca automática' : 'Reproduzir troca automática');
   controls.querySelector('span').setAttribute('aria-live', rotating ? 'off' : 'polite');
   if (rotating && inView && !document.hidden && !showcase.matches(':hover')) {
     interval = setInterval(() => showService(activeService + 1), 8000);
@@ -112,7 +110,6 @@ function chooseService(index) {
 }
 back.onclick = () => chooseService(activeService - 1);
 forward.onclick = () => chooseService(activeService + 1);
-rotation.onclick = () => { rotating = !rotating; scheduleService(); };
 showcase.addEventListener('focusin', event => {
   if (event.target.matches(':focus-visible')) { rotating = false; scheduleService(); }
 });

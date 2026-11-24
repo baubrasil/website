@@ -143,8 +143,7 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .service-deck [aria-hidden="true"] {cursor:pointer;filter:brightness(.84)}
 .service-nav:not([hidden]) {display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
 .service-nav button {min-width:44px;min-height:44px;background:transparent;border:1px solid var(--rule);color:var(--ink);border-radius:50%;font-size:20px}
-.service-nav span,.service-nav .rotation {font-size:14px}
-.service-nav .rotation {border:0;border-radius:0;text-decoration:underline;text-underline-offset:3px}
+.service-nav span {font-size:14px}
 @media(min-width:760px) {
   .service-deck.ready article {width:52%}
 }
