@@ -105,3 +105,6 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .choice-buttons button {min-height:44px; padding:8px 20px; border:1px solid var(--ink); border-radius:24px; background:transparent; color:var(--ink)}
 .cookie-banner button {flex:1}
 #ad-choices button[aria-pressed=true] {background:var(--ink); color:var(--paper)}
+
+#policy-banner, #policy-options {display:inline-flex; align-items:center; min-height:44px}
+.sr-only {position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap}
