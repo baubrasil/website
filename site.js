@@ -11,26 +11,79 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const gallery = document.querySelector('.gallery');
 const pager = document.querySelector('.pager');
 const [prev, next] = pager.querySelectorAll('button');
-function updatePager() {
-  const frame = gallery.getBoundingClientRect();
-  const visible = [...gallery.children].map((card, i) => {
-    const bounds = card.getBoundingClientRect();
-    return bounds.left >= frame.left - 2 && bounds.right <= frame.right + 2 ? i + 1 : 0;
-  }).filter(Boolean);
-  if (visible.length) pager.querySelector('.count').textContent = visible.join(' · ') + ' de ' + gallery.children.length;
-  prev.disabled = gallery.scrollLeft <= 2;
-  next.disabled = gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth - 2;
+const plates = [...gallery.children];
+let activePlate = 0;
+let galleryTimer;
+let galleryVisible = false;
+let galleryInteracted = false;
+
+function showPlate(index) {
+  activePlate = (index + plates.length) % plates.length;
+  const middle = Math.floor(plates.length / 2);
+  plates.forEach((plate, i) => {
+    const slot = (i - activePlate + middle + plates.length) % plates.length - middle;
+    plate.style.setProperty('--slot', slot);
+    plate.classList.toggle('in-frame', slot === 0);
+    plate.classList.toggle('distant', Math.abs(slot) > 1);
+    plate.setAttribute('aria-hidden', String(slot !== 0));
+  });
+  pager.querySelector('.count').textContent = (activePlate + 1) + ' de ' + plates.length;
 }
-function turn(direction) {
-  const step = gallery.children[1].offsetLeft - gallery.children[0].offsetLeft;
-  gallery.scrollBy({left: direction * step, behavior: reduced.matches ? 'instant' : 'smooth'});
+function scheduleGallery() {
+  clearInterval(galleryTimer);
+  if (galleryVisible && !galleryInteracted && !document.hidden && !reduced.matches) {
+    galleryTimer = setInterval(() => showPlate(activePlate + 1), 8000);
+  }
 }
-prev.onclick = () => turn(-1);
-next.onclick = () => turn(1);
+function stopGalleryTimer() {
+  galleryInteracted = true;
+  clearInterval(galleryTimer);
+}
+function movePlate(direction) {
+  stopGalleryTimer();
+  showPlate(activePlate + direction);
+}
+prev.onclick = () => movePlate(-1);
+next.onclick = () => movePlate(1);
+gallery.addEventListener('keydown', event => {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+  event.preventDefault();
+  movePlate(event.key === 'ArrowRight' ? 1 : -1);
+});
+let galleryTouch;
+gallery.addEventListener('touchstart', event => {
+  galleryTouch = event.touches[0];
+  stopGalleryTimer();
+}, {passive:true});
+gallery.addEventListener('touchcancel', () => { galleryTouch = null; });
+gallery.addEventListener('touchend', event => {
+  if (!galleryTouch) return;
+  const dx = event.changedTouches[0].clientX - galleryTouch.clientX;
+  const dy = event.changedTouches[0].clientY - galleryTouch.clientY;
+  galleryTouch = null;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+    event.preventDefault();
+    movePlate(dx < 0 ? 1 : -1);
+  }
+}, {passive:false});
+gallery.addEventListener('click', event => {
+  const index = plates.indexOf(event.target.closest('.plate'));
+  if (index >= 0 && index !== activePlate) {
+    stopGalleryTimer();
+    showPlate(index);
+  }
+});
+gallery.addEventListener('focusin', stopGalleryTimer);
+pager.addEventListener('focusin', stopGalleryTimer);
+document.addEventListener('visibilitychange', scheduleGallery);
+reduced.addEventListener('change', scheduleGallery);
+new IntersectionObserver(([entry]) => {
+  galleryVisible = entry.isIntersecting;
+  scheduleGallery();
+}, {threshold:.5}).observe(gallery);
+gallery.classList.add('circular');
+showPlate(0);
 pager.hidden = false;
-gallery.addEventListener('scroll', updatePager, {passive:true});
-new ResizeObserver(updatePager).observe(gallery);
-updatePager();
 
 const drawingPointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 for (const card of gallery.children) {
@@ -48,11 +101,6 @@ for (const card of gallery.children) {
     for (const key of ['--turn', '--pitch', '--drift']) art.style.removeProperty(key);
   });
 }
-const visibleArt = new IntersectionObserver(entries => {
-  for (const entry of entries) entry.target.classList.toggle('in-frame', entry.intersectionRatio >= 0.7);
-}, {threshold:0.7});
-for (const card of gallery.children) visibleArt.observe(card);
-
 const enterSection = new IntersectionObserver(entries => {
   for (const entry of entries) {
     if (!entry.isIntersecting) continue;
@@ -140,12 +188,6 @@ if ('IntersectionObserver' in window) {
   }, {rootMargin: '-25% 0px -43% 0px'});
   methodSteps.forEach(step => observer.observe(step));
 }
-function adaptGallery() {
-  for (const plate of gallery.children) plate.tabIndex = wide.matches ? 0 : -1;
-}
-adaptGallery();
-wide.addEventListener('change', adaptGallery);
-
 const showcase = document.querySelector('.service-showcase');
 const deck = showcase.querySelector('.service-deck');
 const cards = [...deck.children];

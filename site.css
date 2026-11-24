@@ -117,13 +117,6 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .offers h3{font-size:clamp(21px,2.1vw,31px)}.offers p{margin:10px 0 0}
 #contato h2{max-width:14ch}
 @media(min-width:850px){
-  .gallery {display:flex;isolation:isolate;overflow:visible;align-items:stretch;padding:20px 0 12px}
-  .gallery .plate {flex:1 1 0;min-width:0;padding:22px 17px 26px;transition:transform .2s ease;box-shadow:0 8px 16px #182c420c}
-  .plate+.plate {margin-left:-28px}
-  .plate:nth-child(even){transform:translateY(10px)}
-  .gallery .plate:focus,.gallery .plate:hover{z-index:1;transform:translateY(-6px);border-color:#667587}
-  .gallery .plate-copy p{font-size:15px}
-  .gallery+.pager {display:none}
   .offers{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 }
 @media(prefers-reduced-motion:reduce){.gallery .plate{transition:none}}
@@ -187,13 +180,13 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .plate-art .drawing {stroke:var(--accent-ink);stroke-width:3}
 .plate-art .drawing circle {fill:#bcdfcf}
 .plate-art .guideline {stroke:#526d64}
-.plate:is(:hover,:focus-visible) .plate-art,.plate.in-frame .plate-art {
+.plate.in-frame .plate-art {
   background-color:#193c44;
   background-image:linear-gradient(#a7ead11c 1px,transparent 1px),linear-gradient(90deg,#a7ead11c 1px,transparent 1px);
 }
-.plate:is(:hover,:focus-visible,.in-frame) .drawing {stroke:var(--mint)}
-.plate:is(:hover,:focus-visible,.in-frame) .drawing circle {fill:#36675e}
-.plate:is(:hover,:focus-visible,.in-frame) .guideline {stroke:#cbf2e0}
+.plate.in-frame .drawing {stroke:var(--mint)}
+.plate.in-frame .drawing circle {fill:#36675e}
+.plate.in-frame .guideline {stroke:#cbf2e0}
 .method-path .current .method-thread path,
 .interactive .method-path li:has([aria-pressed="true"]) .method-thread path {stroke:var(--accent-ink);stroke-width:5}
 .service-deck article[data-position="center"] svg {color:var(--accent-ink)}
@@ -286,4 +279,19 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .interactive .method-path li .method-number {background:#e9edeb;color:var(--ink)}
   .interactive .method-path li:has([aria-pressed="true"]) .method-number {background:var(--accent-ink);color:var(--paper)}
   .interactive .method-path button[aria-pressed="true"] {text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+}
+
+.gallery.circular {
+  display:grid;grid-template-columns:1fr;grid-auto-flow:row;justify-items:center;
+  overflow:clip;isolation:isolate;touch-action:pan-y pinch-zoom;padding:8px 0;
+}
+.circular .plate {
+  grid-area:1/1;width:min(80%,32rem);padding:clamp(16px,2.4vw,30px);
+  transform:translateX(calc(var(--slot) * 96%)) scale(.9);
+  opacity:.55;cursor:pointer;
+}
+.circular .plate.in-frame {transform:none;opacity:1;z-index:1;cursor:auto}
+.circular .plate.distant {opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:no-preference) {
+  .circular .plate {transition:transform .42s ease,opacity .32s ease}
 }
