@@ -65,6 +65,16 @@ for (const element of document.querySelectorAll('#possibilidades .section-head, 
 }
 
 const wide = matchMedia('(min-width:850px)');
+const teamTrack = document.querySelector('.team-track');
+const teamMobile = matchMedia('(max-width:759px)');
+function updateTeamStack() {
+  teamTrack.classList.toggle('stacked', teamMobile.matches);
+  teamTrack.classList.toggle('show-victor', teamMobile.matches && teamTrack.getBoundingClientRect().top < innerHeight * .06);
+}
+teamMobile.addEventListener('change', updateTeamStack);
+window.addEventListener('scroll', () => { if (teamMobile.matches) updateTeamStack(); }, {passive:true});
+window.addEventListener('resize', updateTeamStack);
+updateTeamStack();
 const methodSteps = [...document.querySelectorAll('.method-path li')];
 const methodDetail = document.querySelector('#method-detail');
 const methodButtons = methodSteps.map((step, index) => {
