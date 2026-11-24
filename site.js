@@ -83,9 +83,11 @@ form.addEventListener('submit', event => {
 form.querySelector('[type=submit]').disabled = false;
 
 const choices = document.querySelector('#ad-choices');
+const cookieBanner = document.querySelector('.cookie-banner');
 const adStatus = document.querySelector('#ad-status');
 const preferenceKey = 'bau.demo.publicidade.v1';
 function showPreference(value) {
+  cookieBanner.hidden = value === 'allow' || value === 'deny';
   for (const button of choices.querySelectorAll('button')) {
     button.setAttribute('aria-pressed', String(button.value === value));
   }
@@ -97,7 +99,7 @@ try {
 } catch {
   showPreference(null);
 }
-choices.addEventListener('click', event => {
+function choosePreference(event) {
   const button = event.target.closest('button');
   if (!button) return;
   showPreference(button.value);
@@ -106,5 +108,7 @@ choices.addEventListener('click', event => {
   } catch {
     adStatus.textContent += ' A escolha vale apenas enquanto esta página estiver aberta.';
   }
-});
+}
+choices.addEventListener('click', choosePreference);
+cookieBanner.addEventListener('click', choosePreference);
 choices.hidden = false;
