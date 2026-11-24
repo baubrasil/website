@@ -33,37 +33,31 @@ new ResizeObserver(updatePager).observe(gallery);
 updatePager();
 
 const wide = matchMedia('(min-width:850px)');
-const journey = document.querySelector('.journey');
-const panel = journey.querySelector('.stage-detail');
-const stages = [...journey.querySelectorAll('li')];
-const stageButtons = stages.map((item, index) => {
-  const button = document.createElement('button');
-  button.className = 'stage-switch';
-  button.type = 'button';
-  const number = document.createElement('span');
-  number.textContent = String(index + 1).padStart(2, '0');
-  button.append(number, item.querySelector('h3').textContent);
-  item.prepend(button);
-  button.onclick = () => selectStage(index);
-  button.onfocus = () => selectStage(index);
-  button.onpointerenter = event => { if (event.pointerType === 'mouse') selectStage(index); };
-  return button;
-});
-function selectStage(index) {
-  stageButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-  panel.querySelector('small').textContent = 'Etapa ' + (index + 1) + ' de ' + stages.length;
-  panel.querySelector('h3').textContent = stages[index].querySelector('h3').textContent;
-  panel.querySelector('p').textContent = stages[index].querySelector('p').textContent;
+const steps = [...document.querySelectorAll('.method-steps details')];
+const pins = [...document.querySelectorAll('.method-pin')];
+const loops = [...document.querySelectorAll('.method-loops ellipse')];
+function syncMethod() {
+  steps.forEach((step, index) => {
+    pins[index].classList.toggle('selected', step.open);
+    loops[index].classList.toggle('selected', step.open);
+    if (step.open) pins[index].setAttribute('aria-current', 'step');
+    else pins[index].removeAttribute('aria-current');
+  });
 }
-function adaptSections() {
-  journey.classList.toggle('enhanced', wide.matches);
-  panel.hidden = !wide.matches;
-  stageButtons.forEach(button => { button.hidden = !wide.matches; });
+steps.forEach((step, index) => {
+  step.addEventListener('toggle', syncMethod);
+  pins[index].addEventListener('click', event => {
+    event.preventDefault();
+    step.open = true;
+    step.querySelector('summary').focus({preventScroll: wide.matches});
+  });
+});
+syncMethod();
+function adaptGallery() {
   for (const plate of gallery.children) plate.tabIndex = wide.matches ? 0 : -1;
 }
-selectStage(0);
-adaptSections();
-wide.addEventListener('change', adaptSections);
+adaptGallery();
+wide.addEventListener('change', adaptGallery);
 
 const form = document.querySelector('#lead');
 const email = form.querySelector('[type=email]');
