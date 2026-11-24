@@ -164,6 +164,9 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .plate-art .drawing {transform:translateX(var(--drift,0px));transition:transform .16s ease-out}
 }
 .service-showcase {max-width:69rem;margin:2rem auto 0}
+#servicos .wrap:has(.service-deck.ready) {width:100%;max-width:none;padding-inline:0}
+#servicos .section-head {padding-inline:var(--edge)}
+.service-showcase:has(.ready) {max-width:none}
 .service-deck {display:grid;gap:1rem}
 .service-deck article {
   padding:clamp(18px,3.2vw,46px);
@@ -177,21 +180,21 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .service-deck p {margin-top:12px;line-height:1.4}
 .service-deck.ready {
   grid-template-columns:minmax(0,1fr);gap:0;
-  justify-items:center;isolation:isolate;overflow:clip;touch-action:pan-y pinch-zoom;
+  justify-items:center;isolation:isolate;container-type:inline-size;touch-action:pan-y pinch-zoom;
 }
 .service-deck.ready article {
-  grid-area:1/1;width:76%;transform-origin:center;
+  grid-area:1/1;width:70%;transform-origin:center;
   transition:transform .45s ease, filter .45s ease;
 }
 .service-deck [data-position="center"] {z-index:2}
-.service-deck [data-position="left"] {transform:translateX(-68%) scale(.86) perspective(900px) rotateY(12deg)}
-.service-deck [data-position="right"] {transform:translateX(68%) scale(.86) perspective(900px) rotateY(-12deg)}
+.service-deck [data-position="left"] {transform:translateX(calc(-50cqw + 42%)) scale(.84) perspective(1400px) rotateY(-22deg)}
+.service-deck [data-position="right"] {transform:translateX(calc(50cqw - 42%)) scale(.84) perspective(1400px) rotateY(22deg)}
 .service-deck [aria-hidden="true"] {cursor:pointer;filter:brightness(.84)}
 .service-nav:not([hidden]) {display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
 .service-nav button {min-width:44px;min-height:44px;background:transparent;border:1px solid var(--rule);color:var(--ink);border-radius:50%;font-size:20px}
 .service-nav span {font-size:14px}
 @media(min-width:760px) {
-  .service-deck.ready article {width:52%}
+  .service-deck.ready article {width:48%}
 }
 @media(prefers-reduced-motion:reduce) {
   .service-deck.ready article {transition:none}
