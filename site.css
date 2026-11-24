@@ -117,6 +117,13 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .offers h3{font-size:clamp(21px,2.1vw,31px)}.offers p{margin:10px 0 0}
 #contato h2{max-width:14ch}
 @media(min-width:850px){
+  .gallery {display:flex;isolation:isolate;overflow:visible;align-items:stretch;padding:20px 0 12px}
+  .gallery .plate {flex:1 1 0;min-width:0;padding:22px 17px 26px;transition:transform .2s ease;box-shadow:0 8px 16px #182c420c}
+  .plate+.plate {margin-left:-28px}
+  .plate:nth-child(even){transform:translateY(10px)}
+  .gallery .plate.in-frame{z-index:1;transform:translateY(-6px);border-color:#667587}
+  .gallery .plate-copy p{font-size:15px}
+  .gallery+.pager {display:none}
   .offers{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 }
 @media(prefers-reduced-motion:reduce){.gallery .plate{transition:none}}

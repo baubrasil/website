@@ -12,6 +12,7 @@ const gallery = document.querySelector('.gallery');
 const pager = document.querySelector('.pager');
 const [prev, next] = pager.querySelectorAll('button');
 const plates = [...gallery.children];
+const galleryDesktop = matchMedia('(min-width:850px)');
 let activePlate = 0;
 let galleryTimer;
 let galleryVisible = false;
@@ -25,13 +26,13 @@ function showPlate(index) {
     plate.style.setProperty('--slot', slot);
     plate.classList.toggle('in-frame', slot === 0);
     plate.classList.toggle('distant', Math.abs(slot) > 1);
-    plate.setAttribute('aria-hidden', String(slot !== 0));
+    plate.setAttribute('aria-hidden', String(!galleryDesktop.matches && slot !== 0));
   });
   pager.querySelector('.count').textContent = (activePlate + 1) + ' de ' + plates.length;
 }
 function scheduleGallery() {
   clearInterval(galleryTimer);
-  if (galleryVisible && !galleryInteracted && !document.hidden && !reduced.matches) {
+  if (galleryVisible && (galleryDesktop.matches || !galleryInteracted) && !document.hidden && !reduced.matches) {
     galleryTimer = setInterval(() => showPlate(activePlate + 1), 8000);
   }
 }
@@ -42,6 +43,7 @@ function stopGalleryTimer() {
 function movePlate(direction) {
   stopGalleryTimer();
   showPlate(activePlate + direction);
+  scheduleGallery();
 }
 prev.onclick = () => movePlate(-1);
 next.onclick = () => movePlate(1);
@@ -52,6 +54,7 @@ gallery.addEventListener('keydown', event => {
 });
 let galleryTouch;
 gallery.addEventListener('touchstart', event => {
+  if (galleryDesktop.matches) return;
   galleryTouch = event.touches[0];
   stopGalleryTimer();
 }, {passive:true});
@@ -68,12 +71,18 @@ gallery.addEventListener('touchend', event => {
 }, {passive:false});
 gallery.addEventListener('click', event => {
   const index = plates.indexOf(event.target.closest('.plate'));
-  if (index >= 0 && index !== activePlate) {
+  if (index >= 0) {
     stopGalleryTimer();
     showPlate(index);
+    scheduleGallery();
   }
 });
-gallery.addEventListener('focusin', stopGalleryTimer);
+gallery.addEventListener('focusin', event => {
+  stopGalleryTimer();
+  const index = plates.indexOf(event.target);
+  if (galleryDesktop.matches && index >= 0) showPlate(index);
+  scheduleGallery();
+});
 pager.addEventListener('focusin', stopGalleryTimer);
 document.addEventListener('visibilitychange', scheduleGallery);
 reduced.addEventListener('change', scheduleGallery);
@@ -81,12 +90,23 @@ new IntersectionObserver(([entry]) => {
   galleryVisible = entry.isIntersecting;
   scheduleGallery();
 }, {threshold:.5}).observe(gallery);
-gallery.classList.add('circular');
-showPlate(0);
+function adaptPlateLayout() {
+  gallery.classList.toggle('circular', !galleryDesktop.matches);
+  plates.forEach(plate => { plate.tabIndex = galleryDesktop.matches ? 0 : -1; });
+  showPlate(activePlate);
+  scheduleGallery();
+}
+galleryDesktop.addEventListener('change', adaptPlateLayout);
+adaptPlateLayout();
 pager.hidden = false;
 
 const drawingPointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 for (const card of gallery.children) {
+  card.addEventListener('pointerenter', event => {
+    if (!galleryDesktop.matches || event.pointerType !== 'mouse') return;
+    showPlate(plates.indexOf(card));
+    scheduleGallery();
+  });
   const art = card.querySelector('.plate-art');
   card.addEventListener('pointermove', event => {
     if (!drawingPointer.matches || event.pointerType !== 'mouse') return;
