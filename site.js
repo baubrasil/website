@@ -33,26 +33,44 @@ new ResizeObserver(updatePager).observe(gallery);
 updatePager();
 
 const wide = matchMedia('(min-width:850px)');
-const steps = [...document.querySelectorAll('.method-steps details')];
-const pins = [...document.querySelectorAll('.method-pin')];
-const loops = [...document.querySelectorAll('.method-loops ellipse')];
-function syncMethod() {
-  steps.forEach((step, index) => {
-    pins[index].classList.toggle('selected', step.open);
-    loops[index].classList.toggle('selected', step.open);
-    if (step.open) pins[index].setAttribute('aria-current', 'step');
-    else pins[index].removeAttribute('aria-current');
-  });
-}
-steps.forEach((step, index) => {
-  step.addEventListener('toggle', syncMethod);
-  pins[index].addEventListener('click', event => {
-    event.preventDefault();
-    step.open = true;
-    step.querySelector('summary').focus({preventScroll: wide.matches});
-  });
+const methodSteps = [...document.querySelectorAll('.method-path li')];
+const methodDetail = document.querySelector('#method-detail');
+const methodButtons = methodSteps.map((step, index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.setAttribute('aria-controls', 'method-detail');
+  button.textContent = step.querySelector('h3 span:last-child').textContent;
+  button.onclick = () => selectMethod(index);
+  button.onfocus = () => selectMethod(index);
+  button.onpointerenter = event => { if (event.pointerType === 'mouse') selectMethod(index); };
+  step.append(button);
+  return button;
 });
-syncMethod();
+function selectMethod(index) {
+  methodButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(index === i)));
+  methodDetail.querySelector('h3').textContent = methodSteps[index].querySelector('h3 span:last-child').textContent;
+  methodDetail.querySelector('p').textContent = methodSteps[index].querySelector('p').textContent;
+}
+function adaptMethod() {
+  document.querySelector('.method-layout').classList.toggle('interactive', wide.matches);
+  methodDetail.hidden = !wide.matches;
+  methodButtons.forEach(button => { button.hidden = !wide.matches; });
+}
+selectMethod(0);
+adaptMethod();
+wide.addEventListener('change', adaptMethod);
+if ('IntersectionObserver' in window) {
+  const visibleSteps = new Set();
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) visibleSteps.add(entry.target);
+      else visibleSteps.delete(entry.target);
+    }
+    const first = methodSteps.find(step => visibleSteps.has(step));
+    methodSteps.forEach(step => step.classList.toggle('current', step === first));
+  }, {rootMargin: '-25% 0px -43% 0px'});
+  methodSteps.forEach(step => observer.observe(step));
+}
 function adaptGallery() {
   for (const plate of gallery.children) plate.tabIndex = wide.matches ? 0 : -1;
 }

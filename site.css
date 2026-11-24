@@ -87,40 +87,56 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 #policy-banner, #policy-options {display:inline-flex; align-items:center; min-height:44px}
 .sr-only {position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap}
 
-.method-layout {
-  display:grid;
-  grid-template-areas:"heading" "board" "steps";
-  gap:24px;
+.method-layout h2 {max-width:12ch}
+.method-path {
+  list-style:none;
+  padding:0;
+  margin:clamp(40px,6vw,84px) auto 0;
+  max-width:760px;
 }
-.method-layout h2 {grid-area:heading;max-width:12ch}
-.method-board {grid-area:board;position:relative;width:min(100%,480px);margin:auto}
-.method-board svg {display:block;width:100%;height:auto}
-.method-board text {font:700 30px Plex, sans-serif;letter-spacing:-2px;fill:currentColor}
-.method-guides {stroke:#83919b;stroke-width:.7;stroke-dasharray:3 5;fill:none}
-.method-loops ellipse {fill:transparent;stroke:#718394;stroke-width:1.25}
-.method-loops .selected {fill:#182c4210;stroke:var(--ink);stroke-width:2.6}
-.method-pin {
-  position:absolute;display:grid;place-items:center;width:44px;height:44px;
-  transform:translate(-50%,-50%);background:var(--paper);border:1px solid #728391;
-  border-radius:50%;text-decoration:none;font-size:15px;font-variant-numeric:tabular-nums;
+.method-path li {
+  --lane:clamp(48px,13vw,108px);
+  position:relative;
+  padding:0 0 clamp(35px,5vw,68px) calc(var(--lane) + 14px);
 }
-.method-pin:nth-of-type(1) {top:16%;left:50%}
-.method-pin:nth-of-type(2) {top:50%;left:84%}
-.method-pin:nth-of-type(3) {top:84%;left:50%}
-.method-pin:nth-of-type(4) {top:50%;left:16%}
-.method-pin.selected,.method-pin:hover {background:var(--ink);color:var(--paper)}
-.method-steps {grid-area:steps;list-style:none;padding:0;border-top:1px solid #9ba9af}
-.method-steps details {border-bottom:1px solid #9ba9af}
-.method-steps summary {
-  display:flex;align-items:center;gap:16px;min-height:58px;padding-block:10px;
-  font-weight:550;font-size:clamp(24px,2.5vw,37px);letter-spacing:-.035em;
+.method-path li:last-child {padding-bottom:0}
+.method-path h3 {font-size:clamp(24px,3vw,42px);font-weight:550}
+.method-path p {margin-top:10px;color:#394c60;max-width:42ch}
+.method-number {
+  position:absolute;z-index:1;left:calc(var(--lane) * .3);top:0;
+  transform:translateX(-50%);width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;color:var(--ink);background:#e9edeb;
+  border:1px solid #637789;font-size:14px;letter-spacing:0;font-variant-numeric:tabular-nums;
 }
-.method-steps summary::after {content:"+";margin-left:auto;font-size:24px;font-weight:350}
-.method-steps details[open] summary::after {content:"−"}
-.method-steps small {font-size:14px;letter-spacing:0;font-weight:400}
-.method-steps p {max-width:48ch;padding:0 12px 18px 32px;color:#394c60}
+.method-path li:nth-child(even) .method-number {left:calc(var(--lane) * .7)}
+.method-thread {
+  position:absolute;left:0;top:18px;width:var(--lane);height:100%;
+  overflow:visible;pointer-events:none;
+}
+.method-thread path {fill:none;stroke:#708393;stroke-width:3;vector-effect:non-scaling-stroke}
+.method-path li:nth-child(even) .method-thread {transform:scaleX(-1)}
+.method-path .current .method-number {color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.method-path .current path {stroke:var(--ink)}
 @media(min-width:850px) {
-  .method-layout {grid-template-areas:"board heading" "board steps";grid-template-columns:1.1fr 1fr;gap:28px 7%;align-content:center}
-  .method-layout h2 {align-self:end}
-  .method-steps {align-self:start}
+  .method-layout {display:grid;grid-template-columns:1fr 1.3fr;align-items:start;gap:6%}
+  .method-intro {position:sticky;top:12vh}
+  #mecanismo {overflow:clip}
+  .method-path {margin:0}
+  .method-path li {--lane:100px}
+}
+
+@media(min-width:850px) {
+  #method-detail {margin-top:36px;padding-top:18px;border-top:1px solid #9ba9af;max-width:42ch}
+  #method-detail h3 {font-size:24px}
+  #method-detail p {margin-top:8px}
+  .interactive .method-path li {min-height:100px;padding-bottom:32px}
+  .interactive .method-path p,.interactive .method-path h3 span:last-child {display:none}
+  .interactive .method-path h3 {line-height:0}
+  .interactive .method-path button {
+    font:inherit;font-size:clamp(22px,2.3vw,35px);letter-spacing:-.05em;
+    color:var(--ink);background:transparent;border:0;padding:0 0 4px;text-align:left;min-height:44px;
+  }
+  .interactive .method-path li .method-number {background:#e9edeb;color:var(--ink)}
+  .interactive .method-path li:has([aria-pressed="true"]) .method-number {background:var(--ink);color:var(--paper)}
+  .interactive .method-path button[aria-pressed="true"] {text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
 }

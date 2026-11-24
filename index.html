@@ -37,30 +37,29 @@
 </div><div class="pager" hidden><span class="count"></span><button type="button" aria-label="Possibilidade anterior">←</button><button type="button" aria-label="Próxima possibilidade">→</button></div></div></section>
 <section id="mecanismo" class="tint" aria-labelledby="metodo-titulo">
 <div class="wrap block method-layout">
-  <h2 id="metodo-titulo">Do primeiro traço à prática.</h2>
-  <div class="method-board">
-    <svg viewBox="0 0 400 400" aria-hidden="true" focusable="false">
-      <defs><pattern id="method-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(32)"><path d="M0 0v5" stroke="currentColor" opacity=".3"/></pattern></defs>
-      <g class="method-guides"><circle cx="200" cy="200" r="177"/><path d="M8 200h384M200 8v384M64 64l272 272M64 336L336 64"/></g>
-      <g class="method-loops">
-        <ellipse data-loop="0" cx="200" cy="139" rx="65" ry="80" transform="rotate(0 200 200)"/>
-        <ellipse data-loop="1" cx="200" cy="139" rx="65" ry="80" transform="rotate(90 200 200)"/>
-        <ellipse data-loop="2" cx="200" cy="139" rx="65" ry="80" transform="rotate(180 200 200)"/>
-        <ellipse data-loop="3" cx="200" cy="139" rx="65" ry="80" transform="rotate(270 200 200)"/>
-      </g>
-      <circle cx="200" cy="200" r="37" fill="url(#method-hatch)"/>
-      <text x="200" y="207" text-anchor="middle">bau.</text>
-    </svg>
-    <a class="method-pin" href="#passo-1" aria-label="Etapa 1, Entender">01</a>
-    <a class="method-pin" href="#passo-2" aria-label="Etapa 2, Definir">02</a>
-    <a class="method-pin" href="#passo-3" aria-label="Etapa 3, Executar">03</a>
-    <a class="method-pin" href="#passo-4" aria-label="Etapa 4, Evoluir">04</a>
+  <div class="method-intro"><h2 id="metodo-titulo">Do primeiro traço à prática.</h2>
+    <div id="method-detail" hidden aria-live="polite"><h3></h3><p></p></div>
   </div>
-  <ol class="method-steps">
-    <li><details id="passo-1" name="metodo" open><summary><small>01</small>Entender</summary><p>O que a empresa quer alcançar? Ouvimos quem decide e quem vive a rotina para localizar o que merece atenção.</p></details></li>
-    <li><details id="passo-2" name="metodo"><summary><small>02</small>Definir</summary><p>Comparamos impacto, esforço e dependências. Dessa conversa sai uma prioridade que a equipe consegue explicar.</p></details></li>
-    <li><details id="passo-3" name="metodo"><summary><small>03</small>Executar</summary><p>Quando o projeto inclui implementação, conectamos a solução às ferramentas e às pessoas que vão usá-la.</p></details></li>
-    <li><details id="passo-4" name="metodo"><summary><small>04</small>Evoluir</summary><p>O resultado na operação orienta o próximo ajuste.</p></details></li>
+  <ol class="method-path">
+    <li>
+      <svg class="method-thread" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M30 0C30 34 93 39 78 68S60 86 70 100" /></svg>
+      <h3><span class="method-number">01</span><span>Entender a realidade</span></h3>
+      <p>O que a empresa quer alcançar? Ouvimos quem decide e quem vive a rotina para localizar o que merece atenção.</p>
+    </li>
+    <li>
+      <svg class="method-thread" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M30 0C30 34 93 39 78 68S60 86 70 100" /></svg>
+      <h3><span class="method-number">02</span><span>Definir a abordagem</span></h3>
+      <p>Comparamos impacto, esforço e dependências. Dessa conversa sai uma prioridade que a equipe consegue explicar.</p>
+    </li>
+    <li>
+      <svg class="method-thread" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M30 0C30 34 93 39 78 68S60 86 70 100" /></svg>
+      <h3><span class="method-number">03</span><span>Executar o projeto</span></h3>
+      <p>Quando o projeto inclui implementação, conectamos a solução às ferramentas e às pessoas que vão usá-la.</p>
+    </li>
+    <li>
+      <h3><span class="method-number">04</span><span>Evoluir com os resultados</span></h3>
+      <p>O resultado na operação orienta o próximo ajuste.</p>
+    </li>
   </ol>
 </div>
 </section>
