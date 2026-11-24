@@ -74,23 +74,38 @@ const methodButtons = methodSteps.map((step, index) => {
   button.textContent = step.querySelector('h3 span:last-child').textContent;
   button.onclick = () => selectMethod(index);
   button.onfocus = () => selectMethod(index);
-  button.onpointerenter = event => { if (event.pointerType === 'mouse') selectMethod(index); };
+  button.onpointermove = event => { if (event.pointerType === 'mouse') selectMethod(index); };
   step.append(button);
   return button;
 });
 function selectMethod(index) {
+  if (methodButtons[index].getAttribute('aria-pressed') === 'true') return;
   methodButtons.forEach((button, i) => button.setAttribute('aria-pressed', String(index === i)));
   methodDetail.querySelector('h3').textContent = methodSteps[index].querySelector('h3 span:last-child').textContent;
   methodDetail.querySelector('p').textContent = methodSteps[index].querySelector('p').textContent;
+}
+let methodFrame = 0;
+function syncMethodToScroll() {
+  if (!wide.matches || methodFrame) return;
+  methodFrame = requestAnimationFrame(() => {
+    methodFrame = 0;
+    if (!wide.matches) return;
+    const readingLine = window.innerHeight * 0.4;
+    const next = methodSteps.findIndex(step => step.getBoundingClientRect().top > readingLine);
+    selectMethod(next < 0 ? methodSteps.length - 1 : Math.max(0, next - 1));
+  });
 }
 function adaptMethod() {
   document.querySelector('.method-layout').classList.toggle('interactive', wide.matches);
   methodDetail.hidden = !wide.matches;
   methodButtons.forEach(button => { button.hidden = !wide.matches; });
+  syncMethodToScroll();
 }
 selectMethod(0);
 adaptMethod();
 wide.addEventListener('change', adaptMethod);
+window.addEventListener('scroll', syncMethodToScroll, {passive:true});
+window.addEventListener('resize', syncMethodToScroll);
 if ('IntersectionObserver' in window) {
   const visibleSteps = new Set();
   const observer = new IntersectionObserver(entries => {
@@ -99,7 +114,7 @@ if ('IntersectionObserver' in window) {
       else visibleSteps.delete(entry.target);
     }
     const first = methodSteps.find(step => visibleSteps.has(step));
-    methodSteps.forEach(step => step.classList.toggle('current', step === first));
+    methodSteps.forEach(step => step.classList.toggle('current', step === first && !wide.matches));
   }, {rootMargin: '-25% 0px -43% 0px'});
   methodSteps.forEach(step => observer.observe(step));
 }

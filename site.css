@@ -217,7 +217,7 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   #method-detail {margin-top:36px;padding-top:18px;border-top:1px solid #9ba9af;max-width:42ch}
   #method-detail h3 {font-size:24px}
   #method-detail p {margin-top:8px}
-  .interactive .method-path li {min-height:100px;padding-bottom:32px}
+  .interactive .method-path li {min-height:clamp(150px,30vh,270px);padding-bottom:32px}
   .interactive .method-path p,.interactive .method-path h3 span:last-child {display:none}
   .interactive .method-path h3 {line-height:0}
   .interactive .method-path button {
