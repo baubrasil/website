@@ -91,8 +91,8 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .team-track {margin-top:-44px}
 }
 @media(max-width:759px) {
-  .team-track.stacked::after {content:"";display:block;height:48svh}
-  .stacked .team-profiles {position:sticky;top:26svh;isolation:isolate}
+  .team-track.stacked::after {content:"";display:block;height:60vh;height:60svh}
+  .stacked .team-profiles {position:sticky;top:30vh;top:30svh;isolation:isolate}
   .stacked article {grid-area:1/1;transform-origin:bottom center;box-shadow:0 5px 16px #182c4212}
   .stacked:not(.show-victor) article:last-child,.stacked.show-victor article:first-child {
     transform:translateY(16px) scale(.94);background:#e1e7e5;
@@ -100,7 +100,13 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .stacked:not(.show-victor) article:first-child,.stacked.show-victor article:last-child {z-index:1}
 }
 @media(max-width:759px) and (prefers-reduced-motion:no-preference) {
-  .stacked article {transition:transform .34s ease,background-color .34s}
+  .team-track.stacked .team-profiles article:first-child {
+    transform:translateY(calc(16px * var(--swap,0) - 52px * var(--lift,0))) scale(calc(1 - .06 * var(--swap,0)));
+    opacity:calc(1 - var(--lift,0));
+  }
+  .team-track.stacked .team-profiles article:last-child {
+    transform:translateY(calc(16px * (1 - var(--swap,0)))) scale(calc(.94 + .06 * var(--swap,0)));
+  }
 }
 #sobre .section-head{margin-bottom:18px}.people dt{font-size:26px;border-top:1px solid #c7d0d1}.people dd{max-width:42ch}
 .offers {display:grid;gap:12px;padding:0;max-width:none;margin:28px 0 0}

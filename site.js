@@ -69,7 +69,16 @@ const teamTrack = document.querySelector('.team-track');
 const teamMobile = matchMedia('(max-width:759px)');
 function updateTeamStack() {
   teamTrack.classList.toggle('stacked', teamMobile.matches);
-  teamTrack.classList.toggle('show-victor', teamMobile.matches && teamTrack.getBoundingClientRect().top < innerHeight * .06);
+  if (!teamMobile.matches) return;
+  const profiles = teamTrack.firstElementChild;
+  const travel = teamTrack.offsetHeight - profiles.offsetHeight;
+  if (travel <= 0) return;
+  const stickyTop = parseFloat(getComputedStyle(profiles).top);
+  const distance = stickyTop - teamTrack.getBoundingClientRect().top;
+  const progress = Math.max(0, Math.min(1, (distance / travel - .12) / .52));
+  profiles.style.setProperty('--swap', progress);
+  profiles.style.setProperty('--lift', Math.sin(progress * Math.PI));
+  teamTrack.classList.toggle('show-victor', progress >= .5);
 }
 teamMobile.addEventListener('change', updateTeamStack);
 window.addEventListener('scroll', () => { if (teamMobile.matches) updateTeamStack(); }, {passive:true});
