@@ -99,6 +99,9 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .policy {max-width:70ch; margin:auto; padding:clamp(28px,6vw,72px) var(--edge)}
 .policy h1 {margin:24px 0 16px; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1}
 .policy p {margin:16px 0}
+.policy h2 {margin:32px 0 8px; font-size:clamp(1.25rem,3vw,1.6rem); line-height:1.25; letter-spacing:-.025em}
+.policy h2 + p {margin-top:0}
+.policy .policy-date {font-size:.875rem; color:#495869}
 .cookie-banner {position:fixed; z-index:10; inset:auto 12px max(12px,env(safe-area-inset-bottom)); max-width:26rem; max-height:75vh; overflow:auto; margin-left:auto; padding:16px; background:var(--paper); color:var(--ink); border:1px solid var(--rule); border-radius:16px; box-shadow:0 5px 24px #182c4226}
 .cookie-banner p {margin:5px 0 12px; font-size:0.9375rem}
 .choice-buttons:not([hidden]) {display:flex; gap:10px}
