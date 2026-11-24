@@ -66,8 +66,45 @@ adaptSections();
 wide.addEventListener('change', adaptSections);
 
 const form = document.querySelector('#lead');
-form.querySelector('[type=submit]').disabled = false;
+const email = form.querySelector('[type=email]');
+const offers = form.querySelector('#offers');
+function updateEmailRequirement() {
+  email.required = offers.checked;
+  form.querySelector('#email-hint').textContent = offers.checked ? '(obrigatório para ofertas)' : '(opcional)';
+}
+offers.addEventListener('change', updateEmailRequirement);
+window.addEventListener('pageshow', updateEmailRequirement);
 form.addEventListener('submit', event => {
   event.preventDefault();
-  form.querySelector('[role=status]').textContent = 'Teste concluído. Na versão publicada, a equipe recebe o contato para combinar a reunião.';
+  form.reset();
+  updateEmailRequirement();
+  form.querySelector('[role=status]').textContent = 'Teste concluído. Os campos foram apagados. Nenhum contato foi enviado.';
 });
+form.querySelector('[type=submit]').disabled = false;
+
+const choices = document.querySelector('#ad-choices');
+const adStatus = document.querySelector('#ad-status');
+const preferenceKey = 'bau.demo.publicidade.v1';
+function showPreference(value) {
+  for (const button of choices.querySelectorAll('button')) {
+    button.setAttribute('aria-pressed', String(button.value === value));
+  }
+  adStatus.textContent = value === 'allow' ? 'Você aceitou nesta demonstração.' :
+    value === 'deny' ? 'Você recusou nesta demonstração.' : 'Nenhuma escolha registrada.';
+}
+try {
+  showPreference(sessionStorage.getItem(preferenceKey));
+} catch {
+  showPreference(null);
+}
+choices.addEventListener('click', event => {
+  const button = event.target.closest('button');
+  if (!button) return;
+  showPreference(button.value);
+  try {
+    sessionStorage.setItem(preferenceKey, button.value);
+  } catch {
+    adStatus.textContent += ' A escolha vale apenas enquanto esta página estiver aberta.';
+  }
+});
+choices.hidden = false;

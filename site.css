@@ -93,3 +93,10 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
   .offers{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 }
 @media(prefers-reduced-motion:reduce){.gallery .plate{transition:none}}
+.privacy {width:100%; max-width:68ch}
+.privacy summary {padding:12px 0; font-weight:600}
+.privacy p {margin:10px 0}
+.privacy h2 {margin-top:24px; font-size:1.25rem}
+#ad-choices:not([hidden]) {display:flex; gap:10px}
+#ad-choices button {min-height:44px; padding:8px 20px; border:1px solid var(--ink); border-radius:24px; background:transparent; color:var(--ink)}
+#ad-choices button[aria-pressed=true] {background:var(--ink); color:var(--paper)}
