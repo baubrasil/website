@@ -117,6 +117,29 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .method-path li:nth-child(even) .method-thread {transform:scaleX(-1)}
 .method-path .current .method-number {color:var(--paper);background:var(--ink);border-color:var(--ink)}
 .method-path .current path {stroke:var(--ink)}
+:root {--accent-ink:#286c6c}
+.plate:is(:hover,:focus-visible) .drawing {stroke:var(--accent-ink)}
+@media(max-width:849px) {
+  .plate.in-frame .drawing {stroke:var(--accent-ink)}
+}
+.method-path .current .method-thread path {stroke:var(--accent-ink)}
+.interactive .method-path li:has([aria-pressed="true"]) .method-thread path {stroke:var(--accent-ink)}
+.service-deck article[data-position="center"] svg {color:var(--accent-ink)}
+.service-deck article:first-child[data-position="center"] svg {color:#a6ded2}
+@media(prefers-reduced-motion:no-preference) {
+  .entered {animation:section-arrival .48s cubic-bezier(.2,.65,.3,1) both}
+  @keyframes section-arrival {
+    from {translate:0 12px;opacity:.78}
+    to {translate:0 0;opacity:1}
+  }
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .plate-art svg {
+    transform:perspective(380px) rotateX(var(--pitch,0deg)) rotateY(var(--turn,0deg));
+    transition:transform .16s ease-out;
+  }
+  .plate-art .drawing {transform:translateX(var(--drift,0px));transition:transform .16s ease-out}
+}
 .service-showcase {max-width:69rem;margin:2rem auto 0}
 .service-deck {display:grid;gap:1rem}
 .service-deck article {

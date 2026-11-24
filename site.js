@@ -32,6 +32,38 @@ gallery.addEventListener('scroll', updatePager, {passive:true});
 new ResizeObserver(updatePager).observe(gallery);
 updatePager();
 
+const drawingPointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+for (const card of gallery.children) {
+  const art = card.querySelector('.plate-art');
+  card.addEventListener('pointermove', event => {
+    if (!drawingPointer.matches || event.pointerType !== 'mouse') return;
+    const bounds = card.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    art.style.setProperty('--turn', (8 * x) + 'deg');
+    art.style.setProperty('--pitch', (-8 * y) + 'deg');
+    art.style.setProperty('--drift', (8 * x) + 'px');
+  });
+  card.addEventListener('pointerleave', () => {
+    for (const key of ['--turn', '--pitch', '--drift']) art.style.removeProperty(key);
+  });
+}
+const visibleArt = new IntersectionObserver(entries => {
+  for (const entry of entries) entry.target.classList.toggle('in-frame', entry.intersectionRatio >= 0.7);
+}, {root:gallery, threshold:0.7});
+for (const card of gallery.children) visibleArt.observe(card);
+
+const enterSection = new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    entry.target.classList.add('entered');
+    enterSection.unobserve(entry.target);
+  }
+}, {threshold:0.16});
+for (const element of document.querySelectorAll('#possibilidades .section-head, #sobre .team-print, #servicos .section-head')) {
+  enterSection.observe(element);
+}
+
 const wide = matchMedia('(min-width:850px)');
 const methodSteps = [...document.querySelectorAll('.method-path li')];
 const methodDetail = document.querySelector('#method-detail');
