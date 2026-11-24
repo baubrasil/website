@@ -115,21 +115,44 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 }
 .method-thread path {fill:none;stroke:#708393;stroke-width:3;vector-effect:non-scaling-stroke}
 .method-path li:nth-child(even) .method-thread {transform:scaleX(-1)}
-.method-path .current .method-number {color:var(--paper);background:var(--ink);border-color:var(--ink)}
+.method-path .current .method-number {color:var(--paper);background:var(--accent-ink);border-color:var(--ink)}
 .method-path .current path {stroke:var(--ink)}
-:root {--accent-ink:#286c6c}
-.plate:is(:hover,:focus-visible) .drawing {stroke:var(--accent-ink)}
-@media(max-width:849px) {
-  .plate.in-frame .drawing {stroke:var(--accent-ink)}
+:root {--accent-ink:#126c63;--mint:#98f3cf}
+.plate-art {
+  display:grid;align-items:center;overflow:hidden;
+  border-radius:5px;background:#dfebe6;
+  background-image:linear-gradient(#597c731a 1px,transparent 1px),linear-gradient(90deg,#597c731a 1px,transparent 1px);
+  background-size:20px 20px;
 }
-.method-path .current .method-thread path {stroke:var(--accent-ink)}
-.interactive .method-path li:has([aria-pressed="true"]) .method-thread path {stroke:var(--accent-ink)}
+.plate-art svg {height:clamp(106px,13vw,148px)}
+.plate-art .drawing {stroke:var(--accent-ink);stroke-width:3}
+.plate-art .drawing circle {fill:#bcdfcf}
+.plate-art .guideline {stroke:#526d64}
+.plate:is(:hover,:focus-visible) .plate-art,.plate.in-frame .plate-art {
+  background-color:#193c44;
+  background-image:linear-gradient(#a7ead11c 1px,transparent 1px),linear-gradient(90deg,#a7ead11c 1px,transparent 1px);
+}
+.plate:is(:hover,:focus-visible,.in-frame) .drawing {stroke:var(--mint)}
+.plate:is(:hover,:focus-visible,.in-frame) .drawing circle {fill:#36675e}
+.plate:is(:hover,:focus-visible,.in-frame) .guideline {stroke:#cbf2e0}
+.method-path .current .method-thread path,
+.interactive .method-path li:has([aria-pressed="true"]) .method-thread path {stroke:var(--accent-ink);stroke-width:5}
 .service-deck article[data-position="center"] svg {color:var(--accent-ink)}
 .service-deck article:first-child[data-position="center"] svg {color:#a6ded2}
 @media(prefers-reduced-motion:no-preference) {
-  .entered {animation:section-arrival .48s cubic-bezier(.2,.65,.3,1) both}
+  .entered {animation:section-arrival .7s cubic-bezier(.2,.65,.3,1) both}
+  .plate.in-frame .drawing path[pathLength] {animation:trace-plan 1.05s ease-out}
+  @keyframes trace-plan {
+    from {stroke-dasharray:1;stroke-dashoffset:1}
+    to {stroke-dasharray:1;stroke-dashoffset:0}
+  }
+  .service-deck [data-position="center"] svg {animation:service-art-arrival .65s ease-out}
+  @keyframes service-art-arrival {
+    from {transform:scale(.85);opacity:.5}
+    to {transform:scale(1);opacity:1}
+  }
   @keyframes section-arrival {
-    from {translate:0 12px;opacity:.78}
+    from {translate:0 26px;opacity:.45}
     to {translate:0 0;opacity:1}
   }
 }
@@ -199,6 +222,6 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
     color:var(--ink);background:transparent;border:0;padding:0 0 4px;text-align:left;min-height:44px;
   }
   .interactive .method-path li .method-number {background:#e9edeb;color:var(--ink)}
-  .interactive .method-path li:has([aria-pressed="true"]) .method-number {background:var(--ink);color:var(--paper)}
+  .interactive .method-path li:has([aria-pressed="true"]) .method-number {background:var(--accent-ink);color:var(--paper)}
   .interactive .method-path button[aria-pressed="true"] {text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
 }

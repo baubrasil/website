@@ -40,9 +40,9 @@ for (const card of gallery.children) {
     const bounds = card.getBoundingClientRect();
     const x = (event.clientX - bounds.left) / bounds.width - 0.5;
     const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-    art.style.setProperty('--turn', (8 * x) + 'deg');
-    art.style.setProperty('--pitch', (-8 * y) + 'deg');
-    art.style.setProperty('--drift', (8 * x) + 'px');
+    art.style.setProperty('--turn', (16 * x) + 'deg');
+    art.style.setProperty('--pitch', (-16 * y) + 'deg');
+    art.style.setProperty('--drift', (18 * x) + 'px');
   });
   card.addEventListener('pointerleave', () => {
     for (const key of ['--turn', '--pitch', '--drift']) art.style.removeProperty(key);
@@ -50,7 +50,7 @@ for (const card of gallery.children) {
 }
 const visibleArt = new IntersectionObserver(entries => {
   for (const entry of entries) entry.target.classList.toggle('in-frame', entry.intersectionRatio >= 0.7);
-}, {root:gallery, threshold:0.7});
+}, {threshold:0.7});
 for (const card of gallery.children) visibleArt.observe(card);
 
 const enterSection = new IntersectionObserver(entries => {
