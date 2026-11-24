@@ -118,7 +118,13 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .method-path .current .method-number {color:var(--paper);background:var(--ink);border-color:var(--ink)}
 .method-path .current path {stroke:var(--ink)}
 @media(min-width:850px) {
-  .method-layout {display:grid;grid-template-columns:1fr 1.3fr;align-items:start;gap:6%}
+  .method-layout {
+    display:grid;
+    grid-template-columns:minmax(0,26rem) fit-content(28rem);
+    justify-content:center;
+    align-items:start;
+    gap:clamp(32px,5vw,80px);
+  }
   .method-intro {position:sticky;top:12vh}
   #mecanismo {overflow:clip}
   .method-path {margin:0}
