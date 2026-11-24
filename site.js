@@ -77,6 +77,77 @@ function adaptGallery() {
 adaptGallery();
 wide.addEventListener('change', adaptGallery);
 
+const showcase = document.querySelector('.service-showcase');
+const deck = showcase.querySelector('.service-deck');
+const cards = [...deck.children];
+const controls = showcase.querySelector('.service-nav');
+const [back, forward, rotation] = controls.querySelectorAll('button');
+let activeService = 0;
+let rotating = !reduced.matches;
+let inView = false;
+let interval;
+
+function showService(index) {
+  activeService = (index + cards.length) % cards.length;
+  cards.forEach((card, i) => {
+    const offset = (i - activeService + cards.length) % cards.length;
+    card.dataset.position = ['center', 'right', 'left'][offset];
+    card.setAttribute('aria-hidden', String(offset !== 0));
+  });
+  controls.querySelector('span').textContent = (activeService + 1) + ' de ' + cards.length;
+}
+function scheduleService() {
+  clearInterval(interval);
+  rotation.textContent = rotating ? 'Pausar' : 'Reproduzir';
+  rotation.setAttribute('aria-label', rotating ? 'Pausar troca automática' : 'Reproduzir troca automática');
+  controls.querySelector('span').setAttribute('aria-live', rotating ? 'off' : 'polite');
+  if (rotating && inView && !document.hidden && !showcase.matches(':hover')) {
+    interval = setInterval(() => showService(activeService + 1), 8000);
+  }
+}
+function chooseService(index) {
+  rotating = false;
+  showService(index);
+  scheduleService();
+}
+back.onclick = () => chooseService(activeService - 1);
+forward.onclick = () => chooseService(activeService + 1);
+rotation.onclick = () => { rotating = !rotating; scheduleService(); };
+showcase.addEventListener('focusin', event => {
+  if (event.target.matches(':focus-visible')) { rotating = false; scheduleService(); }
+});
+showcase.addEventListener('pointerenter', scheduleService);
+showcase.addEventListener('pointerleave', scheduleService);
+let startTouch;
+deck.addEventListener('touchstart', event => { startTouch = event.touches[0]; }, {passive:true});
+deck.addEventListener('touchcancel', () => { startTouch = null; });
+deck.addEventListener('touchend', event => {
+  if (!startTouch) return;
+  const dx = event.changedTouches[0].clientX - startTouch.clientX;
+  const dy = event.changedTouches[0].clientY - startTouch.clientY;
+  startTouch = null;
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+    event.preventDefault();
+    chooseService(activeService + (dx < 0 ? 1 : -1));
+  }
+}, {passive:false});
+deck.addEventListener('click', event => {
+  const card = event.target.closest('article');
+  if (card && card !== cards[activeService]) chooseService(cards.indexOf(card));
+});
+document.addEventListener('visibilitychange', scheduleService);
+reduced.addEventListener('change', () => {
+  if (reduced.matches) { rotating = false; scheduleService(); }
+});
+showService(0);
+deck.classList.add('ready');
+controls.hidden = false;
+scheduleService();
+new IntersectionObserver(entries => {
+  inView = entries[0].isIntersecting;
+  scheduleService();
+}, {threshold:0.4}).observe(deck);
+
 const form = document.querySelector('#lead');
 const email = form.querySelector('[type=email]');
 const offers = form.querySelector('#offers');
