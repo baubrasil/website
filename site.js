@@ -211,8 +211,6 @@ if ('IntersectionObserver' in window) {
 const showcase = document.querySelector('.service-showcase');
 const deck = showcase.querySelector('.service-deck');
 const cards = [...deck.children];
-const controls = showcase.querySelector('.service-nav');
-const [back, forward] = controls.querySelectorAll('button');
 let activeService = 0;
 let rotating = !reduced.matches;
 let inView = false;
@@ -225,11 +223,10 @@ function showService(index) {
     card.dataset.position = ['center', 'right', 'left'][offset];
     card.setAttribute('aria-hidden', String(offset !== 0));
   });
-  controls.querySelector('span').textContent = (activeService + 1) + ' de ' + cards.length;
 }
 function scheduleService() {
   clearInterval(interval);
-  controls.querySelector('span').setAttribute('aria-live', rotating ? 'off' : 'polite');
+  deck.setAttribute('aria-live', rotating ? 'off' : 'polite');
   if (rotating && inView && !document.hidden && !showcase.matches(':hover')) {
     interval = setInterval(() => showService(activeService + 1), 8000);
   }
@@ -239,8 +236,14 @@ function chooseService(index) {
   showService(index);
   scheduleService();
 }
-back.onclick = () => chooseService(activeService - 1);
-forward.onclick = () => chooseService(activeService + 1);
+deck.tabIndex = 0;
+deck.setAttribute('role', 'group');
+deck.setAttribute('aria-label', 'Serviços. Use as setas esquerda e direita para navegar.');
+deck.addEventListener('keydown', event => {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+  event.preventDefault();
+  chooseService(activeService + (event.key === 'ArrowRight' ? 1 : -1));
+});
 showcase.addEventListener('focusin', event => {
   if (event.target.matches(':focus-visible')) { rotating = false; scheduleService(); }
 });
@@ -269,7 +272,6 @@ reduced.addEventListener('change', () => {
 });
 showService(0);
 deck.classList.add('ready');
-controls.hidden = false;
 scheduleService();
 new IntersectionObserver(entries => {
   inView = entries[0].isIntersecting;

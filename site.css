@@ -265,9 +265,6 @@ form input:focus,form textarea:focus{border-color:var(--paper)}
 .service-deck [data-position="left"] {transform:translateX(calc(-50cqw + 42%)) scale(.84) perspective(1400px) rotateY(-22deg)}
 .service-deck [data-position="right"] {transform:translateX(calc(50cqw - 42%)) scale(.84) perspective(1400px) rotateY(22deg)}
 .service-deck [aria-hidden="true"] {cursor:pointer;filter:brightness(.84)}
-.service-nav:not([hidden]) {display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}
-.service-nav button {min-width:44px;min-height:44px;background:transparent;border:1px solid var(--rule);color:var(--ink);border-radius:50%;font-size:20px}
-.service-nav span {font-size:14px}
 @media(min-width:760px) {
   .service-deck.ready article {width:48%}
 }
