@@ -1,4 +1,5 @@
-.opening h1 > span {font-size:.68em;letter-spacing:-.065em}
+.opening .drawing-board {width:3.27em;height:1.28em}
+.opening h1 > span {font-size:.78em;letter-spacing:-.065em}
 .drawing-board use,.drawing-board text{font-family:Plex,Arial,sans-serif;font-size:100px;font-weight:700;letter-spacing:-6px}
     .drawing-board .stage{animation-duration:10s;animation-timing-function:linear;animation-iteration-count:infinite}
     .pencil{animation-name:pencil;stroke-dasharray:1;stroke-linecap:round;stroke-linejoin:round}
