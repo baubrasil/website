@@ -1,7 +1,11 @@
 const menu = document.querySelector('.menu');
-menu.querySelector('nav').addEventListener('click', () => { menu.open = false; });
+const desktopMenu = matchMedia('(min-width:850px)');
+function syncMenu() { menu.open = desktopMenu.matches; }
+desktopMenu.addEventListener('change', syncMenu);
+syncMenu();
+menu.querySelector('nav').addEventListener('click', () => { if (!desktopMenu.matches) menu.open = false; });
 document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && menu.open) {
+  if (event.key === 'Escape' && menu.open && !desktopMenu.matches) {
     menu.open = false;
     menu.querySelector('summary').focus();
   }
@@ -25,14 +29,14 @@ function showPlate(index) {
     const slot = (i - activePlate + middle + plates.length) % plates.length - middle;
     plate.style.setProperty('--slot', slot);
     plate.classList.toggle('in-frame', slot === 0);
-    plate.classList.toggle('distant', Math.abs(slot) > 1);
-    plate.setAttribute('aria-hidden', String(!galleryDesktop.matches && slot !== 0));
+    plate.classList.toggle('distant', Math.abs(slot) > (galleryDesktop.matches ? 2 : 1));
+    plate.setAttribute('aria-hidden', String(galleryDesktop.matches ? Math.abs(slot) > 2 : slot !== 0));
   });
   pager.querySelector('.count').textContent = (activePlate + 1) + ' de ' + plates.length;
 }
 function scheduleGallery() {
   clearInterval(galleryTimer);
-  if (galleryVisible && (galleryDesktop.matches || !galleryInteracted) && !document.hidden && !reduced.matches) {
+  if (galleryVisible && !galleryInteracted && !document.hidden && !reduced.matches) {
     galleryTimer = setInterval(() => showPlate(activePlate + 1), 8000);
   }
 }
@@ -43,6 +47,7 @@ function stopGalleryTimer() {
 function movePlate(direction) {
   stopGalleryTimer();
   showPlate(activePlate + direction);
+  galleryInteracted = false;
   scheduleGallery();
 }
 prev.onclick = () => movePlate(-1);
@@ -54,11 +59,10 @@ gallery.addEventListener('keydown', event => {
 });
 let galleryTouch;
 gallery.addEventListener('touchstart', event => {
-  if (galleryDesktop.matches) return;
   galleryTouch = event.touches[0];
   stopGalleryTimer();
 }, {passive:true});
-gallery.addEventListener('touchcancel', () => { galleryTouch = null; });
+gallery.addEventListener('touchcancel', () => { galleryTouch = null; galleryInteracted = false; scheduleGallery(); });
 gallery.addEventListener('touchend', event => {
   if (!galleryTouch) return;
   const dx = event.changedTouches[0].clientX - galleryTouch.clientX;
@@ -67,13 +71,14 @@ gallery.addEventListener('touchend', event => {
   if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) {
     event.preventDefault();
     movePlate(dx < 0 ? 1 : -1);
-  }
+  } else { galleryInteracted = false; scheduleGallery(); }
 }, {passive:false});
 gallery.addEventListener('click', event => {
   const index = plates.indexOf(event.target.closest('.plate'));
   if (index >= 0) {
     stopGalleryTimer();
     showPlate(index);
+    galleryInteracted = false;
     scheduleGallery();
   }
 });
@@ -91,8 +96,8 @@ new IntersectionObserver(([entry]) => {
   scheduleGallery();
 }, {threshold:.5}).observe(gallery);
 function adaptPlateLayout() {
-  gallery.classList.toggle('circular', !galleryDesktop.matches);
-  plates.forEach(plate => { plate.tabIndex = galleryDesktop.matches ? 0 : -1; });
+  gallery.classList.add('circular');
+
   showPlate(activePlate);
   scheduleGallery();
 }
@@ -102,11 +107,6 @@ pager.hidden = false;
 
 const drawingPointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
 for (const card of gallery.children) {
-  card.addEventListener('pointerenter', event => {
-    if (!galleryDesktop.matches || event.pointerType !== 'mouse') return;
-    showPlate(plates.indexOf(card));
-    scheduleGallery();
-  });
   const art = card.querySelector('.plate-art');
   card.addEventListener('pointermove', event => {
     if (!drawingPointer.matches || event.pointerType !== 'mouse') return;
@@ -139,7 +139,11 @@ const profiles = teamScene.querySelector('.team-profiles');
 const teamMobile = matchMedia('(max-width:759px)');
 function updateTeamStack() {
   teamTrack.classList.toggle('stacked', teamMobile.matches);
-  if (!teamMobile.matches) return;
+  const profileCards = profiles.children;
+  if (!teamMobile.matches) {
+    for (const card of profileCards) card.inert = false;
+    return;
+  }
   const travel = teamTrack.offsetHeight - teamScene.offsetHeight;
   if (travel <= 0) return;
   const freeSpace = innerHeight - teamScene.offsetHeight - 16;
@@ -150,6 +154,8 @@ function updateTeamStack() {
   profiles.style.setProperty('--swap', progress);
   profiles.style.setProperty('--lift', Math.sin(progress * Math.PI));
   teamTrack.classList.toggle('show-victor', progress >= .5);
+  profileCards[0].inert = progress >= .5;
+  profileCards[1].inert = progress < .5;
 }
 teamMobile.addEventListener('change', updateTeamStack);
 window.addEventListener('scroll', () => { if (teamMobile.matches) updateTeamStack(); }, {passive:true});
