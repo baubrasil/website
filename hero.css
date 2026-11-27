@@ -1,7 +1,18 @@
 .opening .drawing-board {width:4.393em;height:1.716em}
 .opening h1 > span {font-size:.78em;letter-spacing:-.065em;white-space:nowrap}
 .opening h1 > span:nth-child(2) {font-size:.797em}
-@media(min-width:760px) and (max-width:1100px) {.opening h1 {font-size:13vw}}
+@media(min-width:760px) {
+  .opening {--hero-type:127.92px;align-items:stretch}
+  .opening h1 {font-size:var(--hero-type)}
+  .opening .intro {
+    display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+    padding-block:calc(var(--hero-type) * .04) calc(var(--hero-type) * .43);
+  }
+}
+@media(min-width:760px) and (max-width:1100px) {
+  .opening {--hero-type:10.66vw}
+  .opening .intro p {margin-bottom:12px}
+}
 @media(max-width:370px) {.opening h1 {font-size:18vw}}
 .drawing-board use,.drawing-board text{font-family:Plex,Arial,sans-serif;font-size:100px;font-weight:700;letter-spacing:-6px}
     .drawing-board .stage{animation-duration:10s;animation-timing-function:linear;animation-iteration-count:infinite}
